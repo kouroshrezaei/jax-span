@@ -1,4 +1,4 @@
-from jax_span.profiles import gaussian, lorentzian
+from jax_span.profiles import gaussian, lorentzian, spectrum
 import jax.numpy as jnp
 
 x = jnp.linspace(-2.0,6.0,350)
@@ -25,3 +25,15 @@ def test_lorentzian_apex():
     peak = lorentzian(jnp.array(center), amp=amplitude, center=center, sigma=sigma)
     assert peak.item() == amplitude
     
+def test_spectrum_sum_of_two_gaussians():
+    par_1 = jnp.array([5.0,3.2,1.5])
+    par_2 = jnp.array([5.0,4,1.5])
+    params = jnp.stack([par_1, par_2], axis=0)
+    peak1 = gaussian(x, par_1[0], par_1[1], par_1[2])
+    peak2 = gaussian(x, par_2[0], par_2[1], par_2[2])
+    manual = peak1 + peak2
+
+    spec = spectrum(params, x)
+    
+    assert spec.shape == x.shape
+    assert bool(jnp.allclose(spec, manual))
