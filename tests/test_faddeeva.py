@@ -4,7 +4,7 @@ import numpy as np
 import jax.numpy as jnp
 import jax
 
-def test_max_error():
+def test_faddeeva_matches_wofz():
     re = jnp.linspace(-4.0, 4.0, 50)
     im = jnp.linspace(0.01, 2.0, 50)  
     RE, IM = jnp.meshgrid(re, im)
